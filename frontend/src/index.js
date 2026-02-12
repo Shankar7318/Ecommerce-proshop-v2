@@ -68,7 +68,12 @@ const router = createBrowserRouter(
         <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
       </Route>
     </Route>
-  )
+  ),
+  {
+    future: {
+      v7_startTransition: true,
+    },
+  }
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -2,19 +2,28 @@ import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-dotenv.config();
+ //dotenv.config();
+dotenv.config({ path: './backend/.env' });
+
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import cors from 'cors';
+
 
 const port = process.env.PORT || 5000;
 
 connectDB();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +57,21 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(port, () =>
+const server = app.listen(port, () =>
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
 );
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Port ${port} is already in use.`);
+    console.error(`Please either:`);
+    console.error(`  1. Stop the other process using port ${port}`);
+    console.error(`  2. Set a different PORT in your .env file`);
+    console.error(`\nTo find what's using port ${port}, run:`);
+    console.error(`  netstat -ano | findstr :${port}`);
+    console.error(`Then kill it with: taskkill /PID <pid> /F\n`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
+});

@@ -5,7 +5,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: ({ keyword, pageNumber }) => ({
-        url: PRODUCTS_URL,
+        url: PRODUCTS_URL.trim(), // trim just in case
         params: { keyword, pageNumber },
       }),
       keepUnusedDataFor: 5,
@@ -13,20 +13,20 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
     getProductDetails: builder.query({
       query: (productId) => ({
-        url: `${PRODUCTS_URL}/${productId}`,
+        url: `${PRODUCTS_URL.trim()}/${productId}`,
       }),
       keepUnusedDataFor: 5,
     }),
     createProduct: builder.mutation({
       query: () => ({
-        url: `${PRODUCTS_URL}`,
+        url: PRODUCTS_URL.trim(),
         method: 'POST',
       }),
       invalidatesTags: ['Product'],
     }),
     updateProduct: builder.mutation({
       query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}`,
+        url: `${PRODUCTS_URL.trim()}/${data.productId}`,
         method: 'PUT',
         body: data,
       }),
@@ -34,28 +34,28 @@ export const productsApiSlice = apiSlice.injectEndpoints({
     }),
     uploadProductImage: builder.mutation({
       query: (data) => ({
-        url: `/api/upload`,
+        url: `/api/upload`.trim(),
         method: 'POST',
         body: data,
       }),
     }),
     deleteProduct: builder.mutation({
       query: (productId) => ({
-        url: `${PRODUCTS_URL}/${productId}`,
+        url: `${PRODUCTS_URL.trim()}/${productId}`,
         method: 'DELETE',
       }),
       providesTags: ['Product'],
     }),
     createReview: builder.mutation({
       query: (data) => ({
-        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+        url: `${PRODUCTS_URL.trim()}/${data.productId}/reviews`,
         method: 'POST',
         body: data,
       }),
       invalidatesTags: ['Product'],
     }),
     getTopProducts: builder.query({
-      query: () => `${PRODUCTS_URL}/top`,
+      query: () => `${PRODUCTS_URL.trim()}/top`,
       keepUnusedDataFor: 5,
     }),
   }),

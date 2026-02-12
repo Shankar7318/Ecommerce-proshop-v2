@@ -1,7 +1,6 @@
 import { Row, Col } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useGetProductsQuery } from '../slices/productsApiSlice';
-import { Link } from 'react-router-dom';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -19,6 +18,7 @@ const HomeScreen = () => {
 
   return (
     <>
+      <Meta title='ProShop | Home' description='Browse the latest products' />
       {!keyword ? (
         <ProductCarousel />
       ) : (
@@ -26,6 +26,7 @@ const HomeScreen = () => {
           Go Back
         </Link>
       )}
+
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -34,7 +35,6 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
-          <Meta />
           <h1>Latest Products</h1>
           <Row>
             {data.products.map((product) => (
